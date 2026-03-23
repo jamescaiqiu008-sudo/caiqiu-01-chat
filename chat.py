@@ -45,7 +45,7 @@ def get_api_key() -> str:
     key_from_ui = st.session_state.get("api_key_input", "").strip()
     if key_from_ui:
         return key_from_ui
-    return os.getenv("MOONSHOT_API_KEY", "").strip()
+    return os.getenv("MOONSHOT_API_KEY", "").strip() or os.environ.get("MOONSHOT_API_KEY", "").strip()
 
 
 def build_messages_for_api(history: list[dict], max_turns: int) -> list[dict]:
@@ -197,7 +197,7 @@ if user_text:
     api_key = get_api_key()
     if not api_key:
         with st.chat_message("assistant"):
-            st.error("请先在侧边栏填写 API Key")
+            st.error("请先在侧边栏填写 API Key,或在本地.env或Hugging Face Secrets中添加")
         st.stop()
 
     # 3. 构建消息（排除 system）
